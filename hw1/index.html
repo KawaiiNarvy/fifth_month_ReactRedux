@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="core"></div>
+    <script type="text/babel">
+        function Main() {
+            const [todo, setTodo] = React.useState({title : "", id:0, date : ""})
+            const [todos, setTodos] = React.useState([])
+
+            function addTodo(event) {
+                event.preventDefault()
+                const currentId = todo.id
+                setTodo({...todo, id: currentId +1})
+                setTodos([...todos, todo])
+                console.log(todos)
+            }
+
+            const inputChange = (e) => {
+                setTodo({...todo, title : e.target.value})
+            }
+
+            return (
+                <div>
+                    <form onSubmit={addTodo}>
+                        <input
+                            type="text"
+                            value={todo.title}
+                            onChange={inputChange}
+                        />
+                        <button>Добавить</button>
+                    </form>
+                    <TodoList allTodo={todos}/>
+                </div>
+            )
+        }
+        function TodoList({allTodo}) {
+            return (
+                <div>
+                    {allTodo.map(
+                        (element, index) => <TodoItem key={index} item={element}/>
+                    )}
+                </div>                
+            )
+        }
+        function TodoItem({item}) {
+            const itemStyle = {color: "red"}
+            const styles = {
+                itemStyle: {
+                    color: "green",
+                    fontSize: "24px"
+                }
+            }
+
+            return <div style={styles.itemStyle}>{item.id}. {item.title}</div>
+        }
+        
+        ReactDOM.render(<Main/>, document.getElementById("core"))
+    </script>
+</body>
+</html>
